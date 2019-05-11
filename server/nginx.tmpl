@@ -1,0 +1,42 @@
+# normally you leave this at the default of 1024
+events {
+    worker_connections 1024;
+}
+
+http {
+    # cf http://blog.maxcdn.com/accept-encoding-its-vary-important/
+    gzip_vary on; 
+    gzip_proxied any;
+    gzip_types *;
+
+    server_tokens off;
+    
+    upstream django {
+        server app:3031;
+    }
+
+    server {
+        listen 80 default_server;
+        server_name ${NGINX_SERVER_NAME};
+
+        location /static {
+            alias /srv/code/static;
+
+            # http://stackoverflow.com/q/19213510/1346257
+            include /etc/nginx/mime.types;
+        }
+
+        location /media {
+            alias /srv/code/media;
+        }
+
+        location = /robots.txt { return 200 "User-agent: *\nAllow: /"; }
+        location = /favicon.ico { access_log off; log_not_found off; return 404; }
+        
+        location / {
+            uwsgi_pass      django;
+            include         uwsgi_params;
+        }
+    }
+}
+

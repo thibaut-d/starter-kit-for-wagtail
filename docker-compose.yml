@@ -1,0 +1,108 @@
+#####
+# Docker compose YAML file
+#
+# For documentation see: https://docs.docker.com/compose/yml/
+#####
+
+version: '3'
+
+volumes:
+  static-files:
+    driver: local
+  media-files:
+    driver: local
+  postgres:
+    driver: local
+  db-backups:
+    driver: local
+  app-backups:
+    driver: local
+  pgbackups:
+    driver: local
+
+networks:
+  backend:
+  frontend:
+  traefik_network:
+    external: true
+
+services:
+
+  db:
+    image: postgres:11
+    # restart: unless-stopped
+    env_file:
+      - ./.env
+    volumes:
+      - postgres:/var/lib/postgresql/data/pgdata
+    networks:
+      - backend
+
+  pgbackups:
+    build:
+      context: pgbackups
+    # restart: unless-stopped
+    env_file:
+      - ./.env
+    volumes:
+      - pgbackups:/backups
+    depends_on:
+      - db
+    networks:
+      - backend
+
+  redis:
+    image: redis:5.0
+    # restart: unless-stopped
+    networks:
+      - backend
+
+  server:
+      image: nginx:1.15
+      # restart: unless-stopped
+      env_file:
+        - ./.env
+      volumes:
+        - ./server/nginx.tmpl:/etc/nginx/conf.d/nginx.tmpl
+        - static-files:/srv/code/static
+        - media-files:/srv/code/media
+      networks:
+        - frontend
+        - traefik_network
+      depends_on:
+        - app
+      labels:
+        - "traefik.enable=true"
+        - "traefik.docker.network=traefik_network"
+        - "traefik.port=80"
+        - "traefik.entryPoint=https"
+        - "traefik.backend=wagtailnginx"
+        - "traefik.frontend.rule=Host:test.crea.coffee"
+      command: /bin/sh -c "envsubst < /etc/nginx/conf.d/nginx.tmpl > /etc/nginx/nginx.conf && exec nginx -g 'daemon off;'"
+
+  app:
+    build:
+      context: app
+      dockerfile: Dockerfile.app
+    # restart: unless-stopped
+    env_file:
+      - ./.env
+    volumes:
+      - ./app:/srv/code
+      - static-files:/srv/code/static
+      - media-files:/srv/code/media
+      - app-backups:/srv/app-backups
+    networks:
+      - backend
+      - frontend
+      - traefik_network
+    depends_on:
+      - db
+      - redis
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_network"
+      - "traefik.port=8000"
+      - "traefik.entryPoint=https"
+      - "traefik.backend=wagtailapp"
+      - "traefik.frontend.rule=Host:dev.crea.coffee"
