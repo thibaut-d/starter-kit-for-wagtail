@@ -1,12 +1,14 @@
-# docker-wagtail
+# explore.ac
 
-This is a **work in progress** to create a startup environement running under Docker with Wagtail Django based CMS ready for dev.
+This is a **work in progress** to create a tool that get structured content from Wikidata as primary source, with secondary sources such as Wikipedias and PubMed. The objective is to display the data in a readable way accoridng to its type. It will also be possible to focus on a certain topic. I.e., if you are a researcher exploring chronic pain related diseases, the list of diseases accessible from the homepage bloc will be narrowed to diseases that have chronic pain as a symptom according to Wikidata metadata.
 
-I will only update this repository when I need to launch a new project. Feel free to reuse with needed updates.
+## Licence
+
+This project is released under the open source MIT licence.
 
 ## Technologies used
 
-- Docker + Docker Compose
+- Docker + Docker Compose (just "docker-compose up" to get a dev ready environnement)
 - Traefik : Not included in this directory. I use it to proxy the different Docker based projects of my remote dev environement. The SSL certificate is provided by Traefik, so that you will have to modify NGINX configuration if you want HTTPS without Traefik.
 - NGINX : serve static files and proxy uWSGI
 - uWSGI : serve dynamicly generated HTML from Django.
@@ -15,15 +17,12 @@ I will only update this repository when I need to launch a new project. Feel fre
 - Postgres : SQL database
 - Redis : cache
 - Wagtail : Django based headless CMS that provide a user friendly backend for pages edition
+- Boostrap : CSS framework
+- PyWikiBot : a python framework to communicate with Wikidata & Wikipedia APIs
 
-## Other features
+## Credits to packages or inspiration sources used for this project
 
-- Usable for remote dev
-- Rotated db & json backups in Docker volumes
-- Backing up your docker volumes can then be done via a local Cron or https://github.com/blacklabelops/volumerize
-
-## Sources
-
+- [BlackrockDigital/startbootstrap-agency](https://github.com/BlackrockDigital/startbootstrap-agency)
 - [erroneousboat/docker-django](https://github.com/erroneousboat/docker-django)
 - [testdrivenio/django-on-docker](https://github.com/testdrivenio/django-on-docker)
 - [prodrigestivill/docker-postgres-backup-local](https://github.com/prodrigestivill/docker-postgres-backup-local)
@@ -65,6 +64,7 @@ $ sudo docker-compose --verbose up --force-recreate
 # If needed, replace "app" by the name of te service from docker-compose.yml
 $ sudo docker-compose run app /bin/bash
 $ sudo docker-compose run app python /srv/code/manage.py shell
+$ sudo docker-compose run server /bin/bash
 ```
 
 ### Alias
@@ -84,7 +84,8 @@ $ sudo docker-compose run app /bin/bash
 $ wagtail start project .  # not needed unless the current site structure is deleted
 $ pip install -r requirements.txt # not needed unless the current site structure is deleted
 $ ./manage.py migrate # automated in the startup script with fake-initial
-$ ./manage.py runserver 0.0.0.0:8000 # automated in the startup script
+$ ./manage.py collectstatic # automated in the startup script
+$ ./manage.py runserver 0.0.0.0:8000 
 $ ./manage.py createsuperuser
 
 

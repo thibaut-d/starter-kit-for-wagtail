@@ -38,18 +38,18 @@ services:
     networks:
       - backend
 
-  pgbackups:
-    build:
-      context: pgbackups
-    # restart: unless-stopped
-    env_file:
-      - ./.env
-    volumes:
-      - pgbackups:/backups
-    depends_on:
-      - db
-    networks:
-      - backend
+#  pgbackups:
+#    build:
+#      context: pgbackups
+#    # restart: unless-stopped
+#    env_file:
+#      - ./.env
+#    volumes:
+#      - pgbackups:/backups
+#    depends_on:
+#      - db
+#    networks:
+#      - backend
 
   redis:
     image: redis:5.0
@@ -64,8 +64,8 @@ services:
         - ./.env
       volumes:
         - ./server/nginx.tmpl:/etc/nginx/conf.d/nginx.tmpl
-        - static-files:/srv/code/static
-        - media-files:/srv/code/media
+        - static-files:/srv/static
+        - media-files:/srv/media
       networks:
         - frontend
         - traefik_network
@@ -77,7 +77,7 @@ services:
         - "traefik.port=80"
         - "traefik.entryPoint=https"
         - "traefik.backend=wagtailnginx"
-        - "traefik.frontend.rule=Host:test.crea.coffee"
+        - "traefik.frontend.rule=Host:explore.ac"
       command: /bin/sh -c "envsubst < /etc/nginx/conf.d/nginx.tmpl > /etc/nginx/nginx.conf && exec nginx -g 'daemon off;'"
 
   app:
@@ -89,8 +89,8 @@ services:
       - ./.env
     volumes:
       - ./app:/srv/code
-      - static-files:/srv/code/static
-      - media-files:/srv/code/media
+      - static-files:/srv/static
+      - media-files:/srv/media
       - app-backups:/srv/app-backups
     networks:
       - backend
@@ -105,4 +105,4 @@ services:
       - "traefik.port=8000"
       - "traefik.entryPoint=https"
       - "traefik.backend=wagtailapp"
-      - "traefik.frontend.rule=Host:dev.crea.coffee"
+      - "traefik.frontend.rule=Host:dev.explore.ac"
