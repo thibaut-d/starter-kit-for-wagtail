@@ -5,9 +5,9 @@ events {
 
 http {
     # cf http://blog.maxcdn.com/accept-encoding-its-vary-important/
-    # gzip_vary on; 
-    # gzip_proxied any;
-    # gzip_types *;
+    gzip_vary on; 
+    gzip_proxied any;
+    gzip_types *;
 
     server_tokens off;
     

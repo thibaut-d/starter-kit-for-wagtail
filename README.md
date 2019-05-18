@@ -69,26 +69,28 @@ $ sudo docker-compose run server /bin/bash
 
 ### Alias
 
-This one could help to speed up the process of typing commands.
+Could help to speed up the process of typing commands...
 
 ```bash
-alias e="docker-compose exec app"
+alias e="sudo docker-compose exec"
+alias ea="sudo docker-compose exec app"
+alias m="sudo docker-compose exec app ./manage.py"
+alias mmig="sudo docker-compose exec app ./manage.py migrate"
+alias mcol="sudo docker-compose exec app ./manage.py collectstatic"
+alias mrun="sudo docker-compose exec app ./manage.py runserver 0.0.0.0:8000"
+alias msup="sudo docker-compose exec app ./manage.py createsuperuser"
+alias es="sudo docker-compose exec server"
 ```
 
 ### Managing Django/Wagtail
 
-Enter the container first.
-
 ```bash
-$ sudo docker-compose run app /bin/bash
-$ wagtail start project .  # not needed unless the current site structure is deleted
-$ pip install -r requirements.txt # not needed unless the current site structure is deleted
-$ ./manage.py migrate # automated in the startup script with fake-initial
-$ ./manage.py collectstatic # automated in the startup script
-$ ./manage.py runserver 0.0.0.0:8000 
-$ ./manage.py createsuperuser
-
-
+$ sudo docker-compose exec app wagtail start project .  # not needed unless the current site structure is deleted
+$ sudo docker-compose exec app pip install -r config/requirements.txt # not needed unless the current site structure is deleted
+$ sudo docker-compose exec app ./manage.py migrate # automated in the startup script with fake-initial
+$ sudo docker-compose exec app ./manage.py collectstatic # automated in the startup script
+$ sudo docker-compose exec app ./manage.py runserver 0.0.0.0:8000 
+$ sudo docker-compose exec app ./manage.py createsuperuser
 ```
 @
 ### Managing uWSGI
