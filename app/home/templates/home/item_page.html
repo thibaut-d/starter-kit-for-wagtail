@@ -1,0 +1,75 @@
+{% extends "base_ea.html" %}
+{% load static %}
+
+{% block body_class %}template-itempage{% endblock %}
+
+{% block extra_css %}
+
+{% endblock extra_css %}
+
+{% block content %}
+
+<!-- Title -->
+<section class="bg-light page-section" id="item_title">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2 class="section-heading text-uppercase">Item title</h2>
+                <p class="secondary">Alias : Item alias 1 | Item alias 2 | Item alias 3 </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Wikipedia's abstract -->
+<section class="bg-light page-section" id="item_wikipedia">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3 class="section-heading text-uppercase">In a few words...</h3>
+                <p>Fibromyalgia (FM) is a medical condition characterised by chronic widespread pain and a heightened pain response to pressure.[3] Other symptoms include tiredness to a degree that normal activities are affected, sleep problems and troubles with memory.[4] Some people also report restless legs syndrome, bowel or bladder problems, numbness and tingling and sensitivity to noise, lights or temperature.[5] Fibromyalgia is frequently associated with depression, anxiety and posttraumatic stress disorder.[4] Other types of chronic pain are also frequently present.[4]</p>
+                <p>See more on Wikipedia | Other sources </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Wikidata metadata -->
+<section class="bg-light page-section" id="query_results">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3 class="section-subheading text-muted">Metadata/h3>
+                <p>Metadata from Wikidata. See also source 1 | source 2...</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="col-lg-4">Property</div>
+                <div class="col-lg-4">Value</div>
+                <div class="col-lg-4">Qualifiers & sources</div>    
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Wikidata's related studies -->
+<section class="bg-light page-section" id="query_results">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h3 class="section-subheading text-muted">Studies</h3>
+                    <p>Studies from Wikidata. See also source 1 | source 2...</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="col-lg-4">Study title</div>
+                    <div class="col-lg-4">Publication date</div>
+                    <div class="col-lg-4">DOI</div>    
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock content %}
