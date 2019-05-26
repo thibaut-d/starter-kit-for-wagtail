@@ -1,0 +1,54 @@
+{% extends "base_ea.html" %}
+{% load static %}
+
+{% block body_class %}template-querypage{% endblock %}
+
+{% block extra_css %}
+
+{% endblock extra_css %}
+
+{% block content %}
+
+<!-- Title -->
+<section class="bg-light page-section" id="query_title">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2 class="section-heading text-uppercase">Query title</h2>
+                <h3 class="section-subheading text-muted">Query sub title</h3>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Free text -->
+<section class="bg-light page-section" id="query_free_text">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <p> There will be some free texte here if some is added. This could be simple explainations or a manual list.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Query -->
+<section class="bg-light page-section" id="query_results">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3 class="section-subheading text-muted">Query</h3>
+                <p>Links to Wikidata's SPARQL endpoint & other tools/search engines</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="col-lg-4">Page title</div>
+                <div class="col-lg-4">Page description</div>
+                <div class="col-lg-4">External links</div>    
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}
