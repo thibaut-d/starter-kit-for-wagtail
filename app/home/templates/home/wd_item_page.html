@@ -1,0 +1,162 @@
+{% extends "base_ea.html" %}
+{% load static %}
+
+{% block body_class %}template-itempage{% endblock %}
+
+{% block extra_css %}
+
+{% endblock extra_css %}
+
+{% block content %}
+
+<!-- Title -->
+<section class="bg-light page-section" id="item_title">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2 class="section-heading text-uppercase">Item title</h2>
+                <p class="secondary">Alias : Item alias 1 | Item alias 2 | Item alias 3 </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Wikipedia's abstract -->
+<section class="bg-light page-section" id="item_wikipedia">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3 class="section-heading text-uppercase">In a few words...</h3>
+                <p>Fibromyalgia (FM) is a medical condition characterised by chronic widespread pain and a heightened pain response to pressure.[3] Other symptoms include tiredness to a degree that normal activities are affected, sleep problems and troubles with memory.[4] Some people also report restless legs syndrome, bowel or bladder problems, numbness and tingling and sensitivity to noise, lights or temperature.[5] Fibromyalgia is frequently associated with depression, anxiety and posttraumatic stress disorder.[4] Other types of chronic pain are also frequently present.[4]</p>
+                <p>See more on Wikipedia | Other sources </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Wikidata metadata -->
+<section class="bg-light page-section" id="query_results">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3 class="section-subheading text-muted">Metadata/h3>
+                <p>Metadata from Wikidata. See also source 1 | source 2...</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="col-lg-4">Property</div>
+                <div class="col-lg-4">Value</div>
+                <div class="col-lg-4">Qualifiers & sources</div>    
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Wikidata's related studies -->
+<section class="bg-light page-section" id="query_results">
+        <div class="container">
+            <div class="row">
+        <div class="col-xl-8">
+          <div class="card">
+            <div class="card-header border-0">
+              <div class="row align-items-center">
+                <div class="col">
+                  <h3 class="mb-0">Page visits</h3>
+                </div>
+                <div class="col text-right">
+                  <a href="#!" class="btn btn-sm btn-primary">See all</a>
+                </div>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <!-- Projects table -->
+              <table class="table align-items-center table-flush">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">Page name</th>
+                    <th scope="col">Visitors</th>
+                    <th scope="col">Unique users</th>
+                    <th scope="col">Bounce rate</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">
+                      /argon/
+                    </th>
+                    <td>
+                      4,569
+                    </td>
+                    <td>
+                      340
+                    </td>
+                    <td>
+                      <i class="fas fa-arrow-up text-success mr-3"></i> 46,53%
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">
+                      /argon/index.html
+                    </th>
+                    <td>
+                      3,985
+                    </td>
+                    <td>
+                      319
+                    </td>
+                    <td>
+                      <i class="fas fa-arrow-down text-warning mr-3"></i> 46,53%
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">
+                      /argon/charts.html
+                    </th>
+                    <td>
+                      3,513
+                    </td>
+                    <td>
+                      294
+                    </td>
+                    <td>
+                      <i class="fas fa-arrow-down text-warning mr-3"></i> 36,49%
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">
+                      /argon/tables.html
+                    </th>
+                    <td>
+                      2,050
+                    </td>
+                    <td>
+                      147
+                    </td>
+                    <td>
+                      <i class="fas fa-arrow-up text-success mr-3"></i> 50,87%
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">
+                      /argon/profile.html
+                    </th>
+                    <td>
+                      1,795
+                    </td>
+                    <td>
+                      190
+                    </td>
+                    <td>
+                      <i class="fas fa-arrow-down text-danger mr-3"></i> 46,53%
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        </div>
+    </section>
+
+{% endblock content %}
