@@ -112,6 +112,9 @@ class ArticleTagPage(TaggedItemBase):
     )
 
 class ArticleTagIndexPage(Page):
+    '''
+    Adding a page type to display a list of tags
+    '''
 
     def get_context(self, request):
 
@@ -122,7 +125,7 @@ class ArticleTagIndexPage(Page):
         # Update template context
         context = super().get_context(request)
         context['articlepages'] = articlepages
-        return context=
+        return context
 
 class ItemPage(Page):
     
