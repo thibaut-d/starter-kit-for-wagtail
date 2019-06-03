@@ -48,7 +48,7 @@ class ArticlePage(Page):
 
     # Database fields
 
-    subtitle = models.CharField(max_length=100)
+    subtitle = models.CharField(max_length=255)
 
     body = StreamField([
         ('heading', blocks.CharBlock(classname="full title")),
@@ -153,20 +153,164 @@ class ItemPage(Page):
         - Other visual tools & graph algortyhms could be further added
     '''
 
-    pass
+    # Database fields
 
+    ## The user click on a link like https://explore.ac/item?qid="Q123"
+    ## It renders the "default" item page
+    ## But if there is a page with the Qid from the query string qid="Q123" :
+    ##     the notes will be added to the page
+    ## if there is no "qid" query string in the url, the qid from this field is rendered
+    item_Qid = models.CharField(max_length=255)
 
-@register_snippet
-class InstanceOfQidParams(models.Model):
-    instance_of_Qid = models.CharField(max_length=255)
+    ## This lets the site contributors add notes to some items internally
+    notes = StreamField([
+        ('heading', blocks.CharBlock(classname="full title")),
+        ('paragraph', blocks.RichTextBlock()),
+        ('image', ImageChooserBlock()),
+        ('quote', BlockQuoteBlock()),
+        ('page', PageChooserBlock()),
+        ('document', DocumentChooserBlock()),
+        ('embed', EmbedBlock()),
+        ('wikidata_query', WdQueryBlock()),
+    ])
+
+    ## The image is used for the index of pages that have notes
+    feed_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    ## This override the Pids gathered from WdClass for this item specifically
     featured_Pids = ArrayField(
             models.CharField(max_length=255, blank=True)
         )
 
-    panels = [
-        FieldPanel('instance_of_Qid'),
+    # Search index configuration
+
+    search_fields = Page.search_fields + [
+        index.SearchField('item_Qid'),
+        index.SearchField('notes'),
+        index.SearchField('featured_Pids'),
+    ]
+
+    # Editor panels configuration
+
+    content_panels = Page.content_panels + [
+        FieldPanel('item_Qid'),
+        FieldPanel('notes', classname="full"),
         FieldPanel('featured_Pids'),
     ]
 
-    def __str__(self):
-        return self.instance_of_Qid
+    promote_panels = [
+        MultiFieldPanel(Page.promote_panels, "Common page configuration"),
+        ImageChooserPanel('feed_image'),
+    ]
+
+class ItemsIndexPage(Page):
+    # Making the intro editable from the admin panel
+    intro = RichTextField(blank=True)
+    
+    content_panels = Page.content_panels + [
+        FieldPanel('intro', classname="full")
+    ]
+
+    def get_context(self, request):
+        # Update context to include only published posts, ordered by reverse-chron
+        context = super().get_context(request)
+        articlepages = self.get_children().live().order_by('-first_published_at')
+        context['articlepages'] = articlepages
+        return context
+
+class WdClass(Page):
+
+    '''
+    This type of page display a table with :
+       - Items as rows
+       - Featured Pids as columns
+    It is also used to store the featured Pids per class for ItemPages.
+    '''
+
+    # Database fields
+
+    class_Qid = models.CharField(max_length=255)
+    featured_Pids = ArrayField(
+            models.CharField(max_length=255, blank=True)
+        )
+
+    # Search index configuration
+
+    search_fields = Page.search_fields + [
+        index.SearchField('class_Qid'),
+        index.SearchField('featured_Pids'),
+    ]
+
+    # Editor panels configuration
+
+    content_panels = Page.content_panels + [
+        FieldPanel('class_Qid'),
+        FieldPanel('featured_Pids'),
+    ]
+
+    promote_panels = [
+        MultiFieldPanel(Page.promote_panels, "Common page configuration"),
+    ]
+
+class FocusPage(page):
+
+    '''
+    These are homepages for sub-sites such as chronic-pain.reviews
+    These also store the data relative to the focus.
+    '''
+
+    # Database fields
+    
+    ## site url, used for logo
+    url = models.URLField()
+
+    ## Wikidata items used to narrow SPARQL queries within the focus
+    wd_Qids = ArrayField(
+            models.CharField(max_length=255, blank=True)
+        )  
+
+    ## keywords used to narrow external search engines within the focus
+    keywords = ArrayField(
+            models.CharField(max_length=255, blank=True)
+        ) 
+    
+    ## Intro message printed over the image
+    intro = RichTextField(blank=True)
+
+    ## Full width intro image
+    intro_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    # Search index configuration
+
+    search_fields = Page.search_fields + [
+        index.FilterField('url'),
+        index.SearchField('wd_Qids'),
+        index.FilterField('keywords'),
+        index.FilterField('intro'),
+    ]
+
+    # Editor panels configuration
+
+    content_panels = Page.content_panels + [
+        FieldPanel('url'),
+        FieldPanel('wd_Qids'),
+        FieldPanel('keywords'),
+        FieldPanel('intro', classname="full"),
+    ]
+
+    promote_panels = [
+        MultiFieldPanel(Page.promote_panels, "Common page configuration"),
+        ImageChooserPanel('intro_image'),
+    ]
