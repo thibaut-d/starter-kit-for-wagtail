@@ -20,23 +20,71 @@ from wagtail.embeds.blocks import EmbedBlock
 
 from home.custom_blocks import WdQueryBlock
 
-class HomePage(Page): # To be changed to EaHomePage
-    pass
+class HomePage(Page):
 
-class EaHomePage(Page):
-    # Making the intro editable from the admin panel
-    intro = RichTextField(blank=True)
+    '''
+    These are homepages explore.ac and for sub-sites such as chronic-pain.reviews
+    These also store the data relative to the focus.
+    '''
+
+    # Database fields
     
-    content_panels = Page.content_panels + [
-        FieldPanel('intro', classname="full")
+    ## site url, used for the logo
+    url = models.URLField(blank=True)
+
+    ## Wikidata items used to narrow SPARQL queries within the focus
+    wd_Qids = ArrayField(
+            models.CharField(max_length=255, blank=True)
+        )  
+
+    ## keywords used to narrow external search engines within the focus
+    keywords = ArrayField(
+            models.CharField(max_length=255, blank=True)
+        ) 
+    
+    ## Intro message printed over the image
+    intro = RichTextField(blank=True)
+
+    ## Full width intro image
+    intro_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    # Search index configuration
+
+    search_fields = Page.search_fields + [
+        index.FilterField('url'),
+        index.SearchField('wd_Qids'),
+        index.FilterField('keywords'),
+        index.FilterField('intro'),
     ]
 
+    # Editor panels configuration
+
+    content_panels = Page.content_panels + [
+        FieldPanel('url'),
+        FieldPanel('wd_Qids'),
+        FieldPanel('keywords'),
+        FieldPanel('intro', classname="full"),
+    ]
+
+    promote_panels = [
+        MultiFieldPanel(Page.promote_panels, "Common page configuration"),
+        ImageChooserPanel('intro_image'),
+    ]
+
+    # Update context to include only published posts, ordered by reverse-chron
+
     def get_context(self, request):
-        # Update context to include only published posts, ordered by reverse-chron
         context = super().get_context(request)
         articlepages = self.get_children().live().order_by('-first_published_at')
         context['articlepages'] = articlepages
         return context
+
 
 class ArticlePage(Page):
 
@@ -258,59 +306,4 @@ class WdClass(Page):
         MultiFieldPanel(Page.promote_panels, "Common page configuration"),
     ]
 
-class FocusPage(page):
 
-    '''
-    These are homepages for sub-sites such as chronic-pain.reviews
-    These also store the data relative to the focus.
-    '''
-
-    # Database fields
-    
-    ## site url, used for logo
-    url = models.URLField()
-
-    ## Wikidata items used to narrow SPARQL queries within the focus
-    wd_Qids = ArrayField(
-            models.CharField(max_length=255, blank=True)
-        )  
-
-    ## keywords used to narrow external search engines within the focus
-    keywords = ArrayField(
-            models.CharField(max_length=255, blank=True)
-        ) 
-    
-    ## Intro message printed over the image
-    intro = RichTextField(blank=True)
-
-    ## Full width intro image
-    intro_image = models.ForeignKey(
-        'wagtailimages.Image',
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+'
-    )
-
-    # Search index configuration
-
-    search_fields = Page.search_fields + [
-        index.FilterField('url'),
-        index.SearchField('wd_Qids'),
-        index.FilterField('keywords'),
-        index.FilterField('intro'),
-    ]
-
-    # Editor panels configuration
-
-    content_panels = Page.content_panels + [
-        FieldPanel('url'),
-        FieldPanel('wd_Qids'),
-        FieldPanel('keywords'),
-        FieldPanel('intro', classname="full"),
-    ]
-
-    promote_panels = [
-        MultiFieldPanel(Page.promote_panels, "Common page configuration"),
-        ImageChooserPanel('intro_image'),
-    ]
