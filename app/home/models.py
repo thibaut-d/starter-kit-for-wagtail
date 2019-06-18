@@ -1,9 +1,13 @@
+# Core Django
+from django import forms
 from django.db import models
 
-from modelcluster.fields import ParentalKey
+# Tags
+from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
 
+# Classical fields
 from wagtail.core.models import Page, Orderable
 from wagtail.core.fields import RichTextField
 from django.contrib.postgres.fields import ArrayField
@@ -11,13 +15,17 @@ from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, InlinePanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 
+# Streamfield
+from wagtail.core.fields import StreamField
 from wagtail.core import blocks
+from wagtail.admin.edit_handlers import FieldPanel, StreamFieldPanel
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
 from wagtail.snippets.models import register_snippet
 from wagtail.embeds.blocks import EmbedBlock
 
+# Custom streamfield
 from home.custom_blocks import WdQueryBlock
 
 class HomePage(Page):
@@ -30,7 +38,7 @@ class HomePage(Page):
     # Database fields
     
     ## site url, used for the logo
-    url = models.URLField(blank=True)
+    link = models.URLField(blank=True)
     
     ## Intro message printed over the image
     intro = RichTextField(blank=True)
@@ -50,7 +58,7 @@ class HomePage(Page):
     # Search index configuration
 
     search_fields = Page.search_fields + [
-        index.FilterField('url'),
+        index.FilterField('link'),
         index.FilterField('intro'),
         index.FilterField('intro_articles'),
     ]
@@ -58,9 +66,7 @@ class HomePage(Page):
     # Editor panels configuration
 
     content_panels = Page.content_panels + [
-        FieldPanel('url'),
-        FieldPanel('wd_Qids'),
-        FieldPanel('keywords'),
+        FieldPanel('link'),
         FieldPanel('intro', classname="full"),
         FieldPanel('intro_articles', classname="full"),
     ]
@@ -78,6 +84,32 @@ class HomePage(Page):
         context['articlepages'] = articlepages
         return context
 
+class ArticlePageTag(TaggedItemBase):
+    '''
+    Add tagging capacity to pages.
+    Based on Django tag system.
+    '''
+    content_object = ParentalKey(
+        'ArticlePage',
+        related_name='tagged_items',
+        on_delete=models.CASCADE
+    )
+
+class ArticleTagIndexPage(Page):
+    '''
+    Adding a page type to display a list of tags
+    '''
+
+    def get_context(self, request):
+
+        # Filter by tag
+        tag = request.GET.get('tag')
+        articlepages = ArticlePage.objects.filter(tags__name=tag)
+
+        # Update template context
+        context = super().get_context(request)
+        context['articlepages'] = articlepages
+        return context
 
 class ArticlePage(Page):
 
@@ -93,8 +125,8 @@ class ArticlePage(Page):
         ('heading', blocks.CharBlock(classname="full title")),
         ('paragraph', blocks.RichTextBlock()),
         ('image', ImageChooserBlock()),
-        ('quote', BlockQuoteBlock()),
-        ('page', PageChooserBlock()),
+        ('quote', blocks.BlockQuoteBlock()),
+        ('page', blocks.PageChooserBlock()),
         ('document', DocumentChooserBlock()),
         ('embed', EmbedBlock()),
         ('wikidata_query', WdQueryBlock()),
@@ -129,7 +161,6 @@ class ArticlePage(Page):
 
     content_panels = Page.content_panels + [
         MultiFieldPanel([
-            FieldPanel('subtitle'),
             FieldPanel('date'),
             FieldPanel('tags'),
             FieldPanel('categories', widget=forms.CheckboxSelectMultiple),
@@ -141,33 +172,6 @@ class ArticlePage(Page):
         MultiFieldPanel(Page.promote_panels, "Common page configuration"),
         ImageChooserPanel('feed_image'),
     ]
-
-class ArticleTagPage(TaggedItemBase):
-    '''
-    Add tagging capacity to pages.
-    Based on Django tag system.
-    '''
-    content_object = ParentalKey(
-        'ArticlePage',
-        related_name='tagged_items',
-        on_delete=models.CASCADE
-    )
-
-class ArticleTagIndexPage(Page):
-    '''
-    Adding a page type to display a list of tags
-    '''
-
-    def get_context(self, request):
-
-        # Filter by tag
-        tag = request.GET.get('tag')
-        articlepages = ArticlePage.objects.filter(tags__name=tag)
-
-        # Update template context
-        context = super().get_context(request)
-        context['articlepages'] = articlepages
-        return context
 
 class WikidataClass(Page):
 
