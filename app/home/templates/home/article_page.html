@@ -17,6 +17,21 @@
     </div>
 </section>
 
+<!-- Categories -->
+{% with categories=page.categories.all %}
+    {% if categories %}
+        <h3>Posted in:</h3>
+        <ul>
+            {% for category in categories %}
+                <li style="display: inline">
+                    {% image category.icon fill-32x32 style="vertical-align: middle" %}
+                    {{ category.name }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
+
 <!-- StreamField -->
 <section class="bg-light page-section" id="query_free_text">
     <div class="container">

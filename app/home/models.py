@@ -111,7 +111,9 @@ class ArticlePage(Page):
         related_name='+'
     )
 
-    tags = ClusterTaggableManager(through=BlogPageTag, blank=True)
+    categories = ParentalManyToManyField('home.ArticleCategory', blank=True)
+
+    tags = ClusterTaggableManager(through=ArticlePageTag, blank=True)
 
 
     # Search index configuration
@@ -130,6 +132,7 @@ class ArticlePage(Page):
             FieldPanel('subtitle'),
             FieldPanel('date'),
             FieldPanel('tags'),
+            FieldPanel('categories', widget=forms.CheckboxSelectMultiple),
         ], heading="Article information"),
         FieldPanel('body', classname="full"),
     ]
@@ -203,26 +206,6 @@ class WikidataClass(Page):
 
 ## Categories
 
-@register_snippet
-class BlogCategory(models.Model):
-    name = models.CharField(max_length=255)
-    icon = models.ForeignKey(
-        'wagtailimages.Image', null=True, blank=True,
-        on_delete=models.SET_NULL, related_name='+'
-    )
-
-    panels = [
-        FieldPanel('name'),
-        ImageChooserPanel('icon'),
-    ]
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name_plural = 'blog categories'
-
-
 class ArticleCategory(Page):
 
     '''
@@ -255,28 +238,21 @@ class ArticleCategory(Page):
 
     search_fields = Page.search_fields + [
         FieldPanel('name'),
-        ImageChooserPanel('icon'),
-        index.FilterField('intro'),
     ]
 
     # Editor panels configuration
 
-    content_panels = Page.content_panels + [
-        FieldPanel('url'),
-        FieldPanel('wd_Qids'),
-        FieldPanel('keywords'),
+    panels = [
+        FieldPanel('name'),
+        ImageChooserPanel('icon'),
         FieldPanel('intro', classname="full"),
     ]
 
-    promote_panels = [
-        MultiFieldPanel(Page.promote_panels, "Common page configuration"),
-        ImageChooserPanel('intro_image'),
-    ]
+    # Meta
 
-    # Update context to include only published posts, ordered by reverse-chron
+    def __str__(self):
+        return self.name
 
-  #  def get_context(self, request):
-  #      context = super().get_context(request)
-  #      articlepages = self.get_children().live().order_by('-first_published_at')
-  #      context['articlepages'] = articlepages
-  #      return context
+    class Meta:
+        verbose_name_plural = 'Article categories'
+
