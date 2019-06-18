@@ -1,0 +1,24 @@
+{% extends "ea_base.html" %}
+{% load wagtailcore_tags %}
+
+{% block content %}
+
+    {% if request.GET.tag|length %}
+        <h4>Showing pages tagged "{{ request.GET.tag }}"</h4>
+    {% endif %}
+
+    {% for articlepage in articlepages %}
+
+          <p>
+              <strong><a href="{% pageurl articlepage %}">{{ articlepage.title }}</a></strong><br />
+              <small>Revised: {{ articlepage.latest_revision_created_at }}</small><br />
+              {% if articlepage.author %}
+                <p>By {{ articlepage.author.profile }}</p>
+              {% endif %}
+          </p>
+
+    {% empty %}
+        No pages found with that tag.
+    {% endfor %}
+
+{% endblock %}
