@@ -39,20 +39,21 @@
       </div>
       <div class="row">
 
+        {% for post in page.get_children %}
         <div class="col-md-4 col-sm-6 portfolio-item">
-          <a class="portfolio-link" href="#portfolioModal1">
+          <a class="portfolio-link" href="{% pageurl post %}">
             <div class="portfolio-hover">
               <div class="portfolio-hover-content">
                 <i class="fas fa-plus fa-3x"></i>
               </div>
             </div>
-            <img class="img-fluid" src="{% static 'home/img/portfolio/01-thumbnail.jpg' %}" alt="">
+            <img class="img-fluid" src="{% image post.image fill-400x300 %}">
           </a>
           <div class="portfolio-caption">
-            <h4>Biological messengers</h4>
-            <p class="text-muted">all available</p>
+            <h4>{{ post.title }}</h4>
           </div>
         </div>
+        {% endfor %}
         
         <div class="col-md-4 col-sm-6 portfolio-item">
           <a class="portfolio-link" href="#portfolioModal2">
