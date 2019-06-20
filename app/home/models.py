@@ -129,7 +129,7 @@ class ArticlePage(Page):
         ('page', blocks.PageChooserBlock()),
         ('document', DocumentChooserBlock()),
         ('embed', EmbedBlock()),
-        ('wikidata_query', WdQueryBlock()),
+        #('wikidata_query', WdQueryBlock()),
     ])
     
     date = models.DateField("Post date")
@@ -189,6 +189,14 @@ class WikidataClass(Page):
             models.CharField(max_length=255, blank=True)
         )
 
+    feed_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )  
+
     # Search index configuration
 
     search_fields = Page.search_fields + [
@@ -205,6 +213,7 @@ class WikidataClass(Page):
 
     promote_panels = [
         MultiFieldPanel(Page.promote_panels, "Common page configuration"),
+        ImageChooserPanel('feed_image'),
     ]
 
 
@@ -219,12 +228,14 @@ class ArticleCategory(Page):
 
     # Database fields
 
-    ## Basic
-    name = models.CharField(max_length=255)
-    icon = models.ForeignKey(
-        'wagtailimages.Image', null=True, blank=True,
-        on_delete=models.SET_NULL, related_name='+'
-    )   
+    ## Image displayed in the feed
+    feed_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )  
 
     ## Intro message printed over the image
     intro = RichTextField(blank=True)
@@ -238,24 +249,19 @@ class ArticleCategory(Page):
         related_name='+'
     )
 
-    # Search index configuration
-
-    search_fields = Page.search_fields + [
-        FieldPanel('name'),
-    ]
-
     # Editor panels configuration
 
-    panels = [
-        FieldPanel('name'),
-        ImageChooserPanel('icon'),
+    content_panels = Page.content_panels + [
         FieldPanel('intro', classname="full"),
     ]
 
-    # Meta
+    promote_panels = [
+        MultiFieldPanel(Page.promote_panels, "Common page configuration"),
+        ImageChooserPanel('feed_image'),
+        ImageChooserPanel('intro_image'),
+    ]
 
-    def __str__(self):
-        return self.name
+    # Meta
 
     class Meta:
         verbose_name_plural = 'Article categories'
