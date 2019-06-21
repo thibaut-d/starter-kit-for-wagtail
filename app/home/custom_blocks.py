@@ -5,5 +5,5 @@ class WdQueryBlock(blocks.StructBlock):
     query_sparql = blocks.TextBlock(help_text='Past here a Wikidata SPARQL request. You can test it before at query.wikidata.org.')
 
     class Meta:
-        icon = 'database'
-        template = 'home/templates/blocks/wd_query_block.html'
+        icon = 'db'
+        template = 'home/wd_query_block.html'

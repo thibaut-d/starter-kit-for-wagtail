@@ -129,7 +129,7 @@ class ArticlePage(Page):
         ('page', blocks.PageChooserBlock()),
         ('document', DocumentChooserBlock()),
         ('embed', EmbedBlock()),
-        #('wikidata_query', WdQueryBlock()),
+        ('wikidata_query', WdQueryBlock()),
     ])
     
     date = models.DateField("Post date")
@@ -165,7 +165,7 @@ class ArticlePage(Page):
             FieldPanel('tags'),
             FieldPanel('categories', widget=forms.CheckboxSelectMultiple),
         ], heading="Article information"),
-        FieldPanel('body', classname="full"),
+        StreamFieldPanel('body', classname="full"),
     ]
 
     promote_panels = [
@@ -228,6 +228,15 @@ class ArticleCategory(Page):
 
     # Database fields
 
+    ## Icon for articles and menue
+    icon_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
     ## Image displayed in the feed
     feed_image = models.ForeignKey(
         'wagtailimages.Image',
@@ -236,9 +245,6 @@ class ArticleCategory(Page):
         on_delete=models.SET_NULL,
         related_name='+'
     )  
-
-    ## Intro message printed over the image
-    intro = RichTextField(blank=True)
 
     ## Full width intro image
     intro_image = models.ForeignKey(
@@ -249,6 +255,9 @@ class ArticleCategory(Page):
         related_name='+'
     )
 
+    ## Intro message printed over the image
+    intro = RichTextField(blank=True)
+
     # Editor panels configuration
 
     content_panels = Page.content_panels + [
@@ -256,9 +265,10 @@ class ArticleCategory(Page):
     ]
 
     promote_panels = [
-        MultiFieldPanel(Page.promote_panels, "Common page configuration"),
+        ImageChooserPanel('icon_image'),
         ImageChooserPanel('feed_image'),
         ImageChooserPanel('intro_image'),
+        MultiFieldPanel(Page.promote_panels, "Common page configuration"),
     ]
 
     # Meta
