@@ -13,8 +13,6 @@ volumes:
     driver: local
   postgres:
     driver: local
-  db-backups:
-    driver: local
   app-backups:
     driver: local
   pgbackups:
@@ -38,21 +36,27 @@ services:
     networks:
       - backend
 
-#  pgbackups:
-#    build:
-#      context: pgbackups
-#    # restart: unless-stopped
-#    env_file:
-#      - ./.env
-#    volumes:
-#      - pgbackups:/backups
-#    depends_on:
-#      - db
-#    networks:
-#      - backend
+  pgbackups:
+    build:
+      context: pgbackups
+    # restart: unless-stopped
+    env_file:
+      - ./.env
+    volumes:
+      - pgbackups:/backups
+    depends_on:
+      - db
+    networks:
+      - backend
 
   redis:
     image: redis:5.0
+    # restart: unless-stopped
+    networks:
+      - backend
+
+  elasticsearch:
+    image: elasticsearch:2.3
     # restart: unless-stopped
     networks:
       - backend
@@ -99,6 +103,7 @@ services:
     depends_on:
       - db
       - redis
+      - elasticsearch
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik_network"

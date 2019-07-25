@@ -61,3 +61,6 @@ target/
 
 #.env
 .env
+
+# PyWikiBot user config
+user-config.py

@@ -75,6 +75,7 @@ Could help to speed up the process of typing commands...
 alias e="sudo docker-compose exec"
 alias ea="sudo docker-compose exec app"
 alias m="sudo docker-compose exec app ./manage.py"
+alias mmmig="sudo docker-compose exec app ./manage.py makemigrations"
 alias mmig="sudo docker-compose exec app ./manage.py migrate"
 alias mcol="sudo docker-compose exec app ./manage.py collectstatic"
 alias mrun="sudo docker-compose exec app ./manage.py runserver 0.0.0.0:8000"
@@ -87,6 +88,7 @@ alias es="sudo docker-compose exec server"
 ```bash
 $ sudo docker-compose exec app wagtail start project .  # not needed unless the current site structure is deleted
 $ sudo docker-compose exec app pip install -r config/requirements.txt # not needed unless the current site structure is deleted
+$ sudo docker-compose exec app ./manage.py makemigrations
 $ sudo docker-compose exec app ./manage.py migrate # automated in the startup script with fake-initial
 $ sudo docker-compose exec app ./manage.py collectstatic # automated in the startup script
 $ sudo docker-compose exec app ./manage.py runserver 0.0.0.0:8000 

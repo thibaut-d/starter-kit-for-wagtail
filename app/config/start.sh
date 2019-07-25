@@ -23,8 +23,7 @@ if [ "$PRODUCTION" == "true" ]; then
 
     # Django: collectstatic
     #
-    # This will upload the files to s3 because of django-storages-redux
-    # and the setting:
+    # Only if you want to upload the files to Amazone S3 :
     # STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
     echo "==> Django setup, executing: collectstatic"
     python3 /srv/code/manage.py collectstatic --noinput -v 3
@@ -34,8 +33,8 @@ else
     #
     # This will give some errors when there is no database to be flushed, but
     # you can ignore these messages.
-    echo "==> Django setup, executing: flush"
-    python3 /srv/code/manage.py flush --noinput
+    # echo "==> Django setup, executing: flush"
+    # python3 /srv/code/manage.py flush --noinput
     ## If our app structure will rely on db content, we may not want
     ## to flush the db each time docker is started once dev starts. 
     ## (Un)comment as needed.
@@ -52,10 +51,6 @@ else
     echo "==> Django setup, executing: collectstatic"
     python3 /srv/code/manage.py collectstatic --noinput -v 3
 
-    # start dev server with support for remote dev
-    # Edit : this blocks the script because runserver keep the hand. To be studied further...
-    # echo "==> Django setup, executing: runserver 0.0.0.0:8000"
-    # python3 /srv/code/manage.py runserver 0.0.0.0:8000 
 fi
 
 chown -R django:django /srv
