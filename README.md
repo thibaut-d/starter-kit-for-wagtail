@@ -67,7 +67,7 @@ $ sudo docker-compose --verbose up --force-recreate
 ```bash
 $ sudo docker-compose exec app wagtail start project .  # not needed unless the current site structure is deleted
 $ sudo docker-compose exec app pip install -r config/requirements.txt # not needed unless the current site structure is deleted
-$ sudo docker-compose exec app ./manage.py makemigrations
+$ sudo docker-compose exec app ./manage.py makemigrations # has to be run after startup with migrate if the migration files have been deleted
 $ sudo docker-compose exec app ./manage.py migrate # automated in the startup script with fake-initial
 $ sudo docker-compose exec app ./manage.py collectstatic # automated in the startup script
 $ sudo docker-compose exec app ./manage.py runserver 0.0.0.0:8000 

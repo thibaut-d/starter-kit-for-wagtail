@@ -11,11 +11,12 @@
 
 
   <!-- Header -->
-  <header class="masthead">
+  {% image page.intro_image original as intro_image %}
+  <header class="masthead" {% if intro_image %} style="background-image: url('{{ intro_image.url }}');" {% endif %}>
     <div class="container">
       <div class="intro-text">
-        <div class="intro-lead-in">Welcome To explore.ac!</div>
-        <div class="intro-heading text-uppercase">Let's find out someting...</div>
+        <div class="intro-lead-in">{{ page.intro|richtext }}</div>
+        <!-- Search -->
         <div class="input-group input-group-rounded input-group-merge col-lg-8" style="float: none; margin: 0 auto;">
           <input type="search" class="form-control form-control-rounded form-control-prepended  text-center" placeholder="What are you looking for ?" aria-label="Search">
           <div class="input-group-prepend">
@@ -24,6 +25,7 @@
             </div>
           </div>
         </div>
+        <!-- End search -->
       </div>
     </div>
   </header>
@@ -33,8 +35,7 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-12 text-center">
-          <h2 class="section-heading text-uppercase">Articles</h2>
-          <h3 class="section-subheading text-muted">Explore local content...</h3>
+          {{ page.intro_articles|richtext }}
         </div>
       </div>
       <div class="row">
@@ -47,7 +48,13 @@
                 <i class="fas fa-plus fa-3x"></i>
               </div>
             </div>
-            <img class="img-fluid" src="{% image post.image fill-400x300 %}">
+            {% if post.feed_image %}
+              {% image post.feed_image fill-400x300 as feed_image %}
+              <img src="{{ header_image.url }}" class="img-fluid"></img>
+            {% else %}
+              <img class="img-fluid" src="{% static 'home/img/portfolio/03-thumbnail.jpg' %}" alt="">
+            {% endif %}  
+            {% image post.feed_image fill-400x300 class="img-fluid" %}
           </a>
           <div class="portfolio-caption">
             <h4>{{ post.title }}</h4>
@@ -55,79 +62,8 @@
         </div>
         {% endfor %}
         
-        <div class="col-md-4 col-sm-6 portfolio-item">
-          <a class="portfolio-link" href="#portfolioModal2">
-            <div class="portfolio-hover">
-              <div class="portfolio-hover-content">
-                <i class="fas fa-plus fa-3x"></i>
-              </div>
-            </div>
-            <img class="img-fluid" src="{% static 'home/img/portfolio/02-thumbnail.jpg' %}" alt="">
-          </a>
-          <div class="portfolio-caption">
-            <h4>Diseases</h4>
-            <p class="text-muted">related to chronic pain</p>
-          </div>
-        </div>
-        <div class="col-md-4 col-sm-6 portfolio-item">
-          <a class="portfolio-link" href="#portfolioModal3">
-            <div class="portfolio-hover">
-              <div class="portfolio-hover-content">
-                <i class="fas fa-plus fa-3x"></i>
-              </div>
-            </div>
-            <img class="img-fluid" src="{% static 'home/img/portfolio/03-thumbnail.jpg' %}" alt="">
-          </a>
-          <div class="portfolio-caption">
-            <h4>Treatments</h4>
-            <p class="text-muted">related to chronic pain</p>
-          </div>
-        </div>
-        <div class="col-md-4 col-sm-6 portfolio-item">
-          <a class="portfolio-link" href="#portfolioModal4">
-            <div class="portfolio-hover">
-              <div class="portfolio-hover-content">
-                <i class="fas fa-plus fa-3x"></i>
-              </div>
-            </div>
-            <img class="img-fluid" src="{% static 'home/img/portfolio/04-thumbnail.jpg' %}" alt="">
-          </a>
-          <div class="portfolio-caption">
-            <h4>Materials</h4>
-            <p class="text-muted">all available</p>
-          </div>
-        </div>
-        <div class="col-md-4 col-sm-6 portfolio-item">
-          <a class="portfolio-link" href="#portfolioModal5">
-            <div class="portfolio-hover">
-              <div class="portfolio-hover-content">
-                <i class="fas fa-plus fa-3x"></i>
-              </div>
-            </div>
-            <img class="img-fluid" src="{% static 'home/img/portfolio/05-thumbnail.jpg' %}" alt="">
-          </a>
-          <div class="portfolio-caption">
-            <h4>Open datasets</h4>
-            <p class="text-muted">related to chronic pain</p>
-          </div>
-        </div>
-        <div class="col-md-4 col-sm-6 portfolio-item">
-          <a class="portfolio-link" href="#portfolioModal6">
-            <div class="portfolio-hover">
-              <div class="portfolio-hover-content">
-                <i class="fas fa-plus fa-3x"></i>
-              </div>
-            </div>
-            <img class="img-fluid" src="{% static 'home/img/portfolio/06-thumbnail.jpg' %}" alt="">
-          </a>
-          <div class="portfolio-caption">
-            <h4>Scholarly articles</h4>
-            <p class="text-muted">related to chronic pain</p>
-          </div>
-        </div>
       </div>
     </div>
   </section>
-
 
 {% endblock content %}
