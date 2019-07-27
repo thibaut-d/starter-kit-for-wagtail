@@ -40,7 +40,7 @@
       </div>
       <div class="row">
 
-        {% for post in page.get_children %}
+        {% for post in page.get_children.specific %}
         <div class="col-md-4 col-sm-6 portfolio-item">
           <a class="portfolio-link" href="{% pageurl post %}">
             <div class="portfolio-hover">
@@ -49,12 +49,11 @@
               </div>
             </div>
             {% if post.feed_image %}
-              {% image post.feed_image fill-400x300 as feed_image %}
-              <img src="{{ header_image.url }}" class="img-fluid"></img>
+              {% image post.feed_image fill-400x324 class="img-fluid" %}
             {% else %}
               <img class="img-fluid" src="{% static 'home/img/portfolio/03-thumbnail.jpg' %}" alt="">
             {% endif %}  
-            {% image post.feed_image fill-400x300 class="img-fluid" %}
+            
           </a>
           <div class="portfolio-caption">
             <h4>{{ post.title }}</h4>

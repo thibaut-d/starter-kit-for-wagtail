@@ -52,6 +52,15 @@ class HomePage(Page):
         related_name='+'
     )
 
+    ## Feed image, used only when a homepage is a subpage of another homepage
+    feed_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    ) 
+
     ## Intro message printed at the start of articles
     intro_articles = RichTextField(blank=True)
 
@@ -74,6 +83,7 @@ class HomePage(Page):
     promote_panels = [
         MultiFieldPanel(Page.promote_panels, "Common page configuration"),
         ImageChooserPanel('intro_image'),
+        ImageChooserPanel('feed_image'),
     ]
 
     # Update context to include only published posts, ordered by reverse-chron
@@ -135,6 +145,14 @@ class ArticlePage(Page):
     date = models.DateField("Post date")
     last_edit_date = models.DateField(auto_now=True)
 
+    intro_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
     feed_image = models.ForeignKey(
         'wagtailimages.Image',
         null=True,
@@ -171,6 +189,7 @@ class ArticlePage(Page):
     promote_panels = [
         MultiFieldPanel(Page.promote_panels, "Common page configuration"),
         ImageChooserPanel('feed_image'),
+        ImageChooserPanel('intro_image'),
     ]
 
 class WikidataClass(Page):
@@ -188,6 +207,14 @@ class WikidataClass(Page):
     featured_Pids = ArrayField(
             models.CharField(max_length=255, blank=True)
         )
+
+    intro_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    ) 
 
     feed_image = models.ForeignKey(
         'wagtailimages.Image',
@@ -214,6 +241,7 @@ class WikidataClass(Page):
     promote_panels = [
         MultiFieldPanel(Page.promote_panels, "Common page configuration"),
         ImageChooserPanel('feed_image'),
+        ImageChooserPanel('intro_image'),
     ]
 
 
