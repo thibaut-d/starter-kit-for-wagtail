@@ -7,7 +7,8 @@
 {% block content %}
 
 <!-- Title -->
-<header class="masthead"  id="article_title">
+{% image page.intro_image original as intro_image %}
+  <header class="masthead" {% if intro_image %} style="background-image: url('{{ intro_image.url }}');" {% endif %} id="article_title">
     <div class="container">
         <div class="intro-text">
             <div class="intro-heading text-uppercase">{{ page.title }}</div>
