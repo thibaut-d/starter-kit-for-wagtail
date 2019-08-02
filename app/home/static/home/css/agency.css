@@ -209,6 +209,12 @@ header.masthead .intro-text .intro-heading {
     padding-top: 250px;
     padding-bottom: 250px;
   }
+  
+  header.masthead-article .intro-text {
+    padding-top: 150px;
+    padding-bottom: 50px;
+  }
+
   header.masthead .intro-text .intro-lead-in {
     font-size: 40px;
     font-style: italic;
@@ -228,6 +234,10 @@ header.masthead .intro-text .intro-heading {
 .service-heading {
   margin: 15px 0;
   text-transform: none;
+}
+
+#portfolio .intro-articles {
+  padding-bottom: 40px;
 }
 
 #portfolio .portfolio-item {
