@@ -2,7 +2,7 @@
 
 This is a **work in progress** to create a tool that get structured content from Wikidata as primary source, with secondary sources such as Wikipedias and PubMed. The objective is to display the data in a readable way according to its type and to help people to find out scientific concepts that are linked together and explore scientific data in a productive way.
 
-Explore.ac is a generalist tool while the final objective will be to get sister sites focused on certain topic :
+Explore.ac is a generalist tool and will be use for these specialized sites:
 - chronic-pain.review : getting data about chronic pain scientific research
 - fr.crea.coffee and en.crea.coffee : a french/english blog with some advanced tools for mechanical engineering, including material research.
 
