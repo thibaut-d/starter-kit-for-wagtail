@@ -7,7 +7,7 @@ The idea behind explore.ac was to get a clearer view on concepts related to chro
 Currently, there is a plan to use the tool for 3 sites:
 - explore.ac : a generalist tool that can be specialized on some topics
 - chronic-pain.review : getting data about chronic pain scientific research
-- fr.crea.coffee and en.crea.coffee : a french/english blog with some advanced tools for mechanical engineering, including material research.
+- fr.crea.coffee and en.crea.coffee : a french/english blog with some advanced tools for mechanical engineering, including material research...
 
 ## Licence
 
