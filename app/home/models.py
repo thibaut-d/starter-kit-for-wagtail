@@ -28,6 +28,10 @@ from wagtail.embeds.blocks import EmbedBlock
 # Custom streamfield
 from home.custom_blocks import WdQueryBlock
 
+#API
+from wagtail.api import APIField
+from wagtail.images.api.fields import ImageRenditionField
+
 class HomePage(Page):
 
     '''
@@ -37,7 +41,7 @@ class HomePage(Page):
 
     # Database fields
     
-    ## site url, used for the logo
+    ## Text for the logo like mysite.com
     link = models.URLField(blank=True)
     
     ## Intro message printed over the image
@@ -86,6 +90,15 @@ class HomePage(Page):
         ImageChooserPanel('feed_image'),
     ]
 
+    # Export fields over the API
+    api_fields = [
+        APIField('link'),
+        APIField('intro'),
+        APIField('intro_image'),
+        APIField('feed_image'),
+        APIField('intro_articles'),
+    ]
+
     # Update context to include only published posts, ordered by reverse-chron
 
     def get_context(self, request):
@@ -104,6 +117,7 @@ class ArticlePageTag(TaggedItemBase):
         related_name='tagged_items',
         on_delete=models.CASCADE
     )
+
 
 class ArticleTagIndexPage(Page):
     '''
@@ -192,6 +206,17 @@ class ArticlePage(Page):
         ImageChooserPanel('intro_image'),
     ]
 
+    # Export fields over the API
+    api_fields = [
+        APIField('body'),
+        APIField('date'),
+        APIField('last_edit_date'),
+        APIField('intro_image'),
+        APIField('feed_image'),
+        APIField('categories'),
+        APIField('tags'),
+    ]
+
 class WikidataClass(Page):
 
     '''
@@ -242,6 +267,14 @@ class WikidataClass(Page):
         MultiFieldPanel(Page.promote_panels, "Common page configuration"),
         ImageChooserPanel('feed_image'),
         ImageChooserPanel('intro_image'),
+    ]
+
+    # Export fields over the API
+    api_fields = [
+        APIField('class_Qid'),
+        APIField('featured_Pids'),
+        APIField('intro_image'),
+        APIField('feed_image'),
     ]
 
 
@@ -297,6 +330,14 @@ class ArticleCategory(Page):
         ImageChooserPanel('feed_image'),
         ImageChooserPanel('intro_image'),
         MultiFieldPanel(Page.promote_panels, "Common page configuration"),
+    ]
+
+    # Export fields over the API
+    api_fields = [
+        APIField('icon_image'),
+        APIField('feed_image'),
+        APIField('intro_image'),
+        APIField('intro'),
     ]
 
     # Meta

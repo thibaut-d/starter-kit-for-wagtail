@@ -60,6 +60,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    'rest_framework',
+    'wagtail.api.v2',
 ]
 
 MIDDLEWARE = [
