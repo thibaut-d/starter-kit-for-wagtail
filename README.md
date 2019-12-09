@@ -1,4 +1,4 @@
-# explore.ac
+# Starter Kit for Wagtail
 
 This is a starter kit that can be used to launch Django projects with Wagtail. It is an already functional website with articles, tags and categories. The frontend is implemented in Django template language with Bootstrap. The API is also activated to use it as a headless CMS.
 
